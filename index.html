@@ -1,1 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Event Ticket Booking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary-color);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--secondary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        nav a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 0 50px;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        /* Event Cards */
+        .events-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .event-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .event-image {
+            height: 180px;
+            background-color: var(--secondary-color);
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .event-date {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .event-details {
+            padding: 20px;
+        }
+
+        .event-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .event-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .event-info i {
+            color: var(--secondary-color);
+            width: 20px;
+        }
+
+        .event-price {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .event-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .seats-available {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .seats-available span {
+            font-weight: 600;
+            color: var(--success-color);
+        }
+
+        .book-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .book-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .book-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-width: 800px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .form-title {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        /* My Tickets Section */
+        .tickets-container {
+            margin-top: 30px;
+        }
+
+        .ticket-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ticket-title {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        .ticket-id {
+            font-size: 14px;
+            color: #666;
+            background-color: #f1f1f1;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .ticket-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .ticket-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .ticket-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-cancel {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #c0392b;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .footer-logo span {
+            color: var(--secondary-color);
+        }
+
+        .footer-info {
+            text-align: right;
+        }
+
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .events-container {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .footer-info {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-ticket-alt"></i>
+                <h1>College<span>Events</span></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" id="nav-events"><i class="fas fa-calendar-alt"></i> Events</a></li>
+                    <li><a href="#" id="nav-tickets"><i class="fas fa-ticket-alt"></i> My Tickets</a></li>
+                    <li><a href="#" id="nav-bookings"><i class="fas fa-history"></i> Booking History</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="events">Upcoming Events</button>
+            <button class="tab-btn" data-tab="tickets">My Tickets</button>
+            <button class="tab-btn" data-tab="bookings">Booking History</button>
+        </div>
+
+        <!-- Events Tab -->
+        <div id="events-tab" class="tab-content active">
+            <h2 class="page-title">Upcoming College Events</h2>
+            <div class="events-container" id="events-list">
+                <!-- Events will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- My Tickets Tab -->
+        <div id="tickets-tab" class="tab-content">
+            <h2 class="page-title">My Tickets</h2>
+            <div class="tickets-container" id="tickets-list">
+                <!-- Tickets will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Booking History Tab -->
+        <div id="bookings-tab" class="tab-content">
+            <h2 class="page-title">Booking History</h2>
+            <div class="tickets-container" id="bookings-list">
+                <!-- Booking history will be loaded here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-form" id="booking-form">
+            <h3 class="form-title">Book Your Ticket</h3>
+            <form id="booking-form-element">
+                <div class="form-group">
+                    <label for="event-name">Event</label>
+                    <input type="text" id="event-name" class="form-control" readonly>
+                    <input type="hidden" id="event-id">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-name">Full Name</label>
+                        <input type="text" id="user-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email Address</label>
+                        <input type="email" id="user-email" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-phone">Phone Number</label>
+                        <input type="tel" id="user-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-course">Course/Department</label>
+                        <input type="text" id="user-course" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ticket-count">Number of Tickets</label>
+                        <input type="number" id="ticket-count" class="form-control" min="1" max="10" value="1" required>
+                        <small class="form-text">Max 10 tickets per booking</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="total-price">Total Price</label>
+                        <input type="text" id="total-price" class="form-control" readonly>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-booking">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modal-title">Booking Confirmed!</h3>
+            <p id="modal-message">Your ticket has been successfully booked. You can view it in the "My Tickets" section.</p>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="modal-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                College<span>Events</span> Ticket System
+            </div>
+            <div class="footer-info">
+                <p>College Event Management System &copy; 2023</p>
+                <p>For support: events@college.edu | Phone: (123) 456-7890</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize events and bookings data in local storage
+        function initializeData() {
+            // Check if events data exists in local storage
+            if (!localStorage.getItem('collegeEvents')) {
+                const events = [
+                    {
+                        id: 1,
+                        name: "Annual College Fest",
+                        date: "2023-11-15",
+                        time: "10:00 AM",
+                        venue: "Main Auditorium",
+                        availableSeats: 150,
+                        price: 50,
+                        description: "A day full of fun, games, music and competitions.",
+                        category: "Festival"
+                    },
+                    {
+                        id: 2,
+                        name: "Tech Symposium 2023",
+                        date: "2023-11-20",
+                        time: "9:00 AM",
+                        venue: "Tech Block",
+                        availableSeats: 80,
+                        price: 100,
+                        description: "Showcasing the latest in technology and innovation.",
+                        category: "Technical"
+                    },
+                    {
+                        id: 3,
+                        name: "Cultural Night",
+                        date: "2023-11-25",
+                        time: "6:00 PM",
+                        venue: "Open Air Theater",
+                        availableSeats: 200,
+                        price: 75,
+                        description: "An evening of music, dance and cultural performances.",
+                        category: "Cultural"
+                    },
+                    {
+                        id: 4,
+                        name: "Sports Tournament Finals",
+                        date: "2023-11-30",
+                        time: "2:00 PM",
+                        venue: "College Stadium",
+                        availableSeats: 300,
+                        price: 30,
+                        description: "Finals of inter-college sports tournament.",
+                        category: "Sports"
+                    },
+                    {
+                        id: 5,
+                        name: "Career Fair 2023",
+                        date: "2023-12-05",
+                        time: "10:00 AM",
+                        venue: "Convocation Hall",
+                        availableSeats: 120,
+                        price: 0,
+                        description: "Connect with top recruiters and companies.",
+                        category: "Career"
+                    },
+                    {
+                        id: 6,
+                        name: "Alumni Meet",
+                        date: "2023-12-10",
+                        time: "5:00 PM",
+                        venue: "College Lawn",
+                        availableSeats: 100,
+                        price: 150,
+                        description: "Networking event with college alumni.",
+                        category: "Networking"
+                    }
+                ];
+                localStorage.setItem('collegeEvents', JSON.stringify(events));
+            }
+            
+            // Check if bookings data exists in local storage
+            if (!localStorage.getItem('ticketBookings')) {
+                localStorage.setItem('ticketBookings', JSON.stringify([]));
+            }
+            
+            // Check if booking history exists in local storage
+            if (!localStorage.getItem('bookingHistory')) {
+                localStorage.setItem('bookingHistory', JSON.stringify([]));
+            }
+        }
+
+        // Load events from local storage
+        function loadEvents() {
+            const events = JSON.parse(localStorage.getItem('collegeEvents'));
+            const eventsContainer = document.getElementById('events-list');
+            
+            eventsContainer.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                
+                // Set different background colors based on category
+                let bgColor = '#3498db'; // Default blue
+                if (event.category === 'Technical') bgColor = '#9b59b6';
+                else if (event.category === 'Cultural') bgColor = '#e74c3c';
+                else if (event.category === 'Sports') bgColor = '#2ecc71';
+                else if (event.category === 'Career') bgColor = '#f39c12';
+                else if (event.category === 'Networking') bgColor = '#1abc9c';
+                
+                eventCard.innerHTML = `
+                    <div class="event-image" style="background-color: ${bgColor};">
+                        <div class="event-date">${formatDate(event.date)}</div>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">${event.name}</h3>
+                        <div class="event-info">
+                            <div><i class="far fa-calendar"></i> ${event.date} | ${event.time}</div>
+                            <div><i class="fas fa-map-marker-alt"></i> ${event.venue}</div>
+                            <div><i class="fas fa-tag"></i> ${event.category}</div>
+                            <div><i class="fas fa-info-circle"></i> ${event.description}</div>
+                        </div>
+                        <div class="event-price">${event.price === 0 ? 'FREE' : `₹${event.price} per ticket`}</div>
+                        <div class="event-actions">
+                            <div class="seats-available">Seats Available: <span>${event.availableSeats}</span></div>
+                            <button class="book-btn" data-id="${event.id}" ${event.availableSeats === 0 ? 'disabled' : ''}>
+                                ${event.availableSeats === 0 ? 'Sold Out' : 'Book Now'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                eventsContainer.appendChild(eventCard);
+            });
+            
+            // Add event listeners to book buttons
+            document.querySelectorAll('.book-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const eventId = parseInt(this.getAttribute('data-id'));
+                    openBookingForm(eventId);
+                });
+            });
+        }
+
+        // Format date to display in a more readable format
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { day: 'numeric', month: 'short' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Open booking form for a specific event
+        function openBookingForm(eventId) {
+            const events = JSON.parse(localStorage.getItem('collegeEvents'));
+            const event = events.find(e => e.id === eventId);
+            
+            if (!event) return;
+            
+            // Populate form with event details
+            document.getElementById('event-id').value = event.id;
+            document.getElementById('event-name').value = event.name;
+            
+            // Reset form
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-email').value = '';
+            document.getElementById('user-phone').value = '';
+            document.getElementById('user-course').value = '';
+            document.getElementById('ticket-count').value = 1;
+            document.getElementById('ticket-count').max = Math.min(10, event.availableSeats);
+            updateTotalPrice();
+            
+            // Show booking form and hide other content
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById('booking-form').style.display = 'block';
+            
+            // Scroll to form
+            document.getElementById('booking-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update total price based on ticket count
+        function updateTotalPrice() {
+            const eventId = parseInt(document.getElementById('event-id').value);
+            const ticketCount = parseInt(document.getElementById('ticket-count').value);
+            
+            if (!eventId || !ticketCount) return;
+            
+            const events = JSON.parse(localStorage.getItem('collegeEvents'));
+            const event = events.find(e => e.id === eventId);
+            
+            if (event) {
+                const totalPrice = event.price * ticketCount;
+                document.getElementById('total-price').value = totalPrice === 0 ? 'FREE' : `₹${totalPrice}`;
+            }
+        }
+
+        // Load user tickets from local storage
+        function loadTickets() {
+            const bookings = JSON.parse(localStorage.getItem('ticketBookings'));
+            const ticketsContainer = document.getElementById('tickets-list');
+            
+            ticketsContainer.innerHTML = '';
+            
+            if (bookings.length === 0) {
+                ticketsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>No Tickets Booked Yet</h3>
+                        <p>Book tickets for upcoming events to see them here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Filter only active tickets (events that haven't passed)
+            const today = new Date().toISOString().split('T')[0];
+            const activeBookings = bookings.filter(booking => booking.eventDate >= today);
+            
+            if (activeBookings.length === 0) {
+                ticketsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>No Active Tickets</h3>
+                        <p>All your booked events have passed. Check booking history for past events.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            activeBookings.forEach(booking => {
+                const ticketCard = document.createElement('div');
+                ticketCard.className = 'ticket-card';
+                
+                ticketCard.innerHTML = `
+                    <div class="ticket-header">
+                        <h4 class="ticket-title">${booking.eventName}</h4>
+                        <span class="ticket-id">Ticket #${booking.bookingId}</span>
+                    </div>
+                    <div class="ticket-details">
+                        <div class="ticket-detail">
+                            <span class="detail-label">Date & Time</span>
+                            <span class="detail-value">${booking.eventDate} | ${booking.eventTime}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Venue</span>
+                            <span class="detail-value">${booking.eventVenue}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Booked By</span>
+                            <span class="detail-value">${booking.userName}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Tickets</span>
+                            <span class="detail-value">${booking.ticketCount} x ₹${booking.ticketPrice}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Total Amount</span>
+                            <span class="detail-value">₹${booking.totalAmount}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Booking Date</span>
+                            <span class="detail-value">${booking.bookingDate}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-actions">
+                        <button class="btn-cancel cancel-ticket" data-id="${booking.bookingId}">Cancel Ticket</button>
+                    </div>
+                `;
+                
+                ticketsContainer.appendChild(ticketCard);
+            });
+            
+            // Add event listeners to cancel buttons
+            document.querySelectorAll('.cancel-ticket').forEach(button => {
+                button.addEventListener('click', function() {
+                    const bookingId = this.getAttribute('data-id');
+                    cancelTicket(bookingId);
+                });
+            });
+        }
+
+        // Load booking history from local storage
+        function loadBookingHistory() {
+            const history = JSON.parse(localStorage.getItem('bookingHistory'));
+            const bookingsContainer = document.getElementById('bookings-list');
+            
+            bookingsContainer.innerHTML = '';
+            
+            if (history.length === 0) {
+                bookingsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <h3>No Booking History</h3>
+                        <p>Your past bookings will appear here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            history.forEach(booking => {
+                const historyCard = document.createElement('div');
+                historyCard.className = 'ticket-card';
+                
+                // Check if event has passed
+                const today = new Date().toISOString().split('T')[0];
+                const isPastEvent = booking.eventDate < today;
+                
+                historyCard.innerHTML = `
+                    <div class="ticket-header">
+                        <h4 class="ticket-title">${booking.eventName}</h4>
+                        <span class="ticket-id">${isPastEvent ? 'Past Event' : 'Upcoming'} | Booking #${booking.bookingId}</span>
+                    </div>
+                    <div class="ticket-details">
+                        <div class="ticket-detail">
+                            <span class="detail-label">Date & Time</span>
+                            <span class="detail-value">${booking.eventDate} | ${booking.eventTime}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Venue</span>
+                            <span class="detail-value">${booking.eventVenue}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Booked By</span>
+                            <span class="detail-value">${booking.userName}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Tickets</span>
+                            <span class="detail-value">${booking.ticketCount} x ₹${booking.ticketPrice}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Total Amount</span>
+                            <span class="detail-value">₹${booking.totalAmount}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Booking Date</span>
+                            <span class="detail-value">${booking.bookingDate}</span>
+                        </div>
+                        <div class="ticket-detail">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value">${booking.status}</span>
+                        </div>
+                    </div>
+                `;
+                
+                bookingsContainer.appendChild(historyCard);
+            });
+        }
+
+        // Cancel a ticket
+        function cancelTicket(bookingId) {
+            const bookings = JSON.parse(localStorage.getItem('ticketBookings'));
+            const bookingIndex = bookings.findIndex(b => b.bookingId === bookingId);
+            
+            if (bookingIndex === -1) return;
+            
+            const booking = bookings[bookingIndex];
+            
+            // Update events to add back the seats
+            const events = JSON.parse(localStorage.getItem('collegeEvents'));
+            const eventIndex = events.findIndex(e => e.id === booking.eventId);
+            
+            if (eventIndex !== -1) {
+                events[eventIndex].availableSeats += booking.ticketCount;
+                localStorage.setItem('collegeEvents', JSON.stringify(events));
+            }
+            
+            // Update booking history
+            const history = JSON.parse(localStorage.getItem('bookingHistory'));
+            const historyIndex = history.findIndex(h => h.bookingId === bookingId);
+            
+            if (historyIndex !== -1) {
+                history[historyIndex].status = 'Cancelled';
+                localStorage.setItem('bookingHistory', JSON.stringify(history));
+            }
+            
+            // Remove from active bookings
+            bookings.splice(bookingIndex, 1);
+            localStorage.setItem('ticketBookings', JSON.stringify(bookings));
+            
+            // Reload data
+            loadEvents();
+            loadTickets();
+            loadBookingHistory();
+            
+            // Show confirmation
+            showModal('Ticket Cancelled', 'Your ticket has been successfully cancelled and the seats have been released.');
+        }
+
+        // Show modal with custom message
+        function showModal(title, message) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('confirmation-modal').style.display = 'flex';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('confirmation-modal').style.display = 'none';
+        }
+
+        // Generate a unique booking ID
+        function generateBookingId() {
+            return 'BK' + Date.now() + Math.floor(Math.random() * 1000);
+        }
+
+        // Format current date for display
+        function getCurrentDate() {
+            const now = new Date();
+            return now.toISOString().split('T')[0];
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data
+            initializeData();
+            
+            // Load events
+            loadEvents();
+            
+            // Load tickets
+            loadTickets();
+            
+            // Load booking history
+            loadBookingHistory();
+            
+            // Tab switching functionality
+            document.querySelectorAll('.tab-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Show active tab content
+                    document.querySelectorAll('.tab-content').forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Hide booking form if it's visible
+                    document.getElementById('booking-form').style.display = 'none';
+                });
+            });
+            
+            // Navigation links functionality
+            document.getElementById('nav-events').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('[data-tab="events"]').click();
+            });
+            
+            document.getElementById('nav-tickets').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('[data-tab="tickets"]').click();
+            });
+            
+            document.getElementById('nav-bookings').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('[data-tab="bookings"]').click();
+            });
+            
+            // Ticket count change listener
+            document.getElementById('ticket-count').addEventListener('change', updateTotalPrice);
+            document.getElementById('ticket-count').addEventListener('input', updateTotalPrice);
+            
+            // Cancel booking button
+            document.getElementById('cancel-booking').addEventListener('click', function() {
+                document.getElementById('booking-form').style.display = 'none';
+                document.querySelector('[data-tab="events"]').click();
+            });
+            
+            // Booking form submission
+            document.getElementById('booking-form-element').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const eventId = parseInt(document.getElementById('event-id').value);
+                const userName = document.getElementById('user-name').value.trim();
+                const userEmail = document.getElementById('user-email').value.trim();
+                const userPhone = document.getElementById('user-phone').value.trim();
+                const userCourse = document.getElementById('user-course').value.trim();
+                const ticketCount = parseInt(document.getElementById('ticket-count').value);
+                
+                // Validation
+                if (!userName || !userEmail || !userPhone || !userCourse) {
+                    showModal('Missing Information', 'Please fill in all required fields.');
+                    return;
+                }
+                
+                if (ticketCount < 1 || ticketCount > 10) {
+                    showModal('Invalid Ticket Count', 'Please select between 1 and 10 tickets.');
+                    return;
+                }
+                
+                // Get event details
+                const events = JSON.parse(localStorage.getItem('collegeEvents'));
+                const eventIndex = events.findIndex(e => e.id === eventId);
+                
+                if (eventIndex === -1) {
+                    showModal('Error', 'Event not found. Please try again.');
+                    return;
+                }
+                
+                const event = events[eventIndex];
+                
+                // Check seat availability
+                if (event.availableSeats < ticketCount) {
+                    showModal('Not Enough Seats', `Only ${event.availableSeats} seats available for this event.`);
+                    return;
+                }
+                
+                // Update available seats
+                events[eventIndex].availableSeats -= ticketCount;
+                localStorage.setItem('collegeEvents', JSON.stringify(events));
+                
+                // Create booking
+                const bookingId = generateBookingId();
+                const totalAmount = event.price * ticketCount;
+                const bookingDate = getCurrentDate();
+                
+                const booking = {
+                    bookingId,
+                    eventId,
+                    eventName: event.name,
+                    eventDate: event.date,
+                    eventTime: event.time,
+                    eventVenue: event.venue,
+                    ticketPrice: event.price,
+                    userName,
+                    userEmail,
+                    userPhone,
+                    userCourse,
+                    ticketCount,
+                    totalAmount,
+                    bookingDate
+                };
+                
+                // Save to active bookings
+                const bookings = JSON.parse(localStorage.getItem('ticketBookings'));
+                bookings.push(booking);
+                localStorage.setItem('ticketBookings', JSON.stringify(bookings));
+                
+                // Save to booking history
+                const history = JSON.parse(localStorage.getItem('bookingHistory'));
+                history.push({
+                    ...booking,
+                    status: 'Confirmed'
+                });
+                localStorage.setItem('bookingHistory', JSON.stringify(history));
+                
+                // Show confirmation
+                showModal('Booking Confirmed!', `Your ticket for ${event.name} has been successfully booked. Booking ID: ${bookingId}`);
+                
+                // Reset and reload
+                document.getElementById('booking-form').style.display = 'none';
+                loadEvents();
+                loadTickets();
+                loadBookingHistory();
+                
+                // Switch to tickets tab
+                document.querySelector('[data-tab="tickets"]').click();
+            });
+            
+            // Modal OK button
+            document.getElementById('modal-ok-btn').addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside
+            document.getElementById('confirmation-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // Initialize total price for booking form
+            updateTotalPrice();
+        });
+    </script>
+</body>
+</html>
